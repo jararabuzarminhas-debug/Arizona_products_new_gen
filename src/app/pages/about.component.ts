@@ -209,7 +209,6 @@ import { Component } from '@angular/core';
           </div>
         </div>
       </div>
-    </div>
   </section>
 
   <!-- Coverage Area -->
