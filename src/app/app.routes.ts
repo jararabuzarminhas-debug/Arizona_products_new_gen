@@ -47,6 +47,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/account.component').then(m => m.AccountComponent)
   },
   {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin.component').then(m => m.AdminComponent)
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full'
