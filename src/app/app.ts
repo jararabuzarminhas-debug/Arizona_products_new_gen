@@ -2,6 +2,7 @@ import { Component, signal, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from './services/cart.service';
+import { AuthService } from './services/auth.service';
 import { CartComponent } from './components/cart.component';
 
 @Component({
@@ -16,7 +17,10 @@ export class App {
 
   @ViewChild(CartComponent) cartComponent!: CartComponent;
 
-  constructor(public cartService: CartService) {}
+  constructor(
+    public cartService: CartService,
+    public authService: AuthService
+  ) {}
 
   openCart(): void {
     this.isCartOpen.set(true);

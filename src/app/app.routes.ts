@@ -35,6 +35,18 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/checkout.component').then(m => m.CheckoutComponent)
   },
   {
+    path: 'login',
+    loadComponent: () => import('./pages/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/register.component').then(m => m.RegisterComponent)
+  },
+  {
+    path: 'account',
+    loadComponent: () => import('./pages/account.component').then(m => m.AccountComponent)
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full'
