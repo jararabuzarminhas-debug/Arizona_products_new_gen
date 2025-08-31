@@ -192,19 +192,21 @@ import { Component } from '@angular/core';
             <p class="text-sm text-gray-600">International quality management standards</p>
           </div>
           
-          <div class="w-20 h-20 bg-arizona-orange rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span class="text-white font-bold text-lg">GMP</span>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-arizona-orange rounded-xl flex items-center justify-center mx-auto mb-4">
+              <span class="text-white font-bold text-lg">GMP</span>
+            </div>
+            <h3 class="font-bold text-medical-navy mb-2">GMP Compliant</h3>
+            <p class="text-sm text-gray-600">Good Manufacturing Practice standards</p>
           </div>
-          <h3 class="font-bold text-medical-navy mb-2">GMP Compliant</h3>
-          <p class="text-sm text-gray-600">Good Manufacturing Practice standards</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-20 h-20 bg-medical-navy rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span class="text-white font-bold text-lg">DRAP</span>
+
+          <div class="text-center">
+            <div class="w-20 h-20 bg-medical-navy rounded-xl flex items-center justify-center mx-auto mb-4">
+              <span class="text-white font-bold text-lg">DRAP</span>
+            </div>
+            <h3 class="font-bold text-medical-navy mb-2">DRAP Licensed</h3>
+            <p class="text-sm text-gray-600">Drug Regulatory Authority Pakistan approved</p>
           </div>
-          <h3 class="font-bold text-medical-navy mb-2">DRAP Licensed</h3>
-          <p class="text-sm text-gray-600">Drug Regulatory Authority Pakistan approved</p>
         </div>
       </div>
     </div>
