@@ -15,7 +15,11 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
           <div class="space-y-4">
             <!-- Main Product Image -->
             <div class="relative">
-              <img src="/api/placeholder/600/600" alt="Bye Bye Fever Cooling Patches" class="w-full rounded-2xl shadow-2xl">
+              <app-product-flip-image
+                frontImage="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=600"
+                backImage="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F997192e653f646c89759edaa49301faa?format=webp&width=600"
+                altText="Bye Bye Fever Cooling Patches">
+              </app-product-flip-image>
               <!-- Up to 8 Hours Badge -->
               <div class="absolute top-6 right-6 bg-healthcare-orange text-white rounded-full w-20 h-20 flex items-center justify-center font-bold text-center shadow-lg">
                 <div>
