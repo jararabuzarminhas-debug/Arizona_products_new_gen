@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProductFlipImageComponent } from '../components/product-flip-image.component';
 
 @Component({
   selector: 'app-bye-bye-fever',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProductFlipImageComponent],
   template: `
     <!-- Product Hero Section -->
     <section class="py-16 bg-cooling-gradient">

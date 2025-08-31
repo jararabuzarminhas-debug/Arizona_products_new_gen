@@ -5,7 +5,7 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProductFlipImageComponent],
   template: `
     <!-- Page Header -->
     <section class="bg-medical-gradient py-16 text-white">
@@ -72,7 +72,11 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
           <!-- Bye Bye Fever - Available Now -->
           <div class="product-card group hover:scale-105 transition-all duration-300">
             <div class="relative mb-6">
-              <img src="/api/placeholder/300/300" alt="Bye Bye Fever Cooling Patches" class="w-full h-64 object-cover rounded-lg">
+              <app-product-flip-image
+                frontImage="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=400"
+                backImage="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F997192e653f646c89759edaa49301faa?format=webp&width=400"
+                altText="Bye Bye Fever Cooling Patches">
+              </app-product-flip-image>
               <!-- Available Badge -->
               <div class="absolute top-4 left-4 bg-healthcare-green text-white px-3 py-1 rounded-full text-sm font-bold">
                 Available Now
