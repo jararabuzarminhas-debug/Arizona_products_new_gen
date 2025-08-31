@@ -91,7 +91,7 @@ import { Component } from '@angular/core';
               <!-- Product Image Container -->
               <div class="bg-white/20 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
                 <div class="bg-white rounded-2xl p-6 shadow-lg">
-                  <img src="/api/placeholder/400/500" alt="Bye Bye Fever Cooling Patches" class="w-full h-auto object-contain">
+                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=600" alt="Bye Bye Fever Cooling Patches - Front" class="w-full h-auto object-contain">
                 </div>
               </div>
 
