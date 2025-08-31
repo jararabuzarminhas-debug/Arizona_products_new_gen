@@ -122,19 +122,19 @@ import { CartService } from '../services/cart.service';
               <div class="flex items-center space-x-4 mb-6">
                 <label class="font-medium text-gray-700">Quantity:</label>
                 <div class="flex items-center border border-gray-200 rounded-lg">
-                  <button class="px-4 py-2 hover:bg-gray-50 transition-colors">-</button>
-                  <span class="px-4 py-2 border-x border-gray-200">1</span>
-                  <button class="px-4 py-2 hover:bg-gray-50 transition-colors">+</button>
+                  <button (click)="decreaseQuantity()" class="px-4 py-2 hover:bg-gray-50 transition-colors">-</button>
+                  <span class="px-4 py-2 border-x border-gray-200">{{quantity()}}</span>
+                  <button (click)="increaseQuantity()" class="px-4 py-2 hover:bg-gray-50 transition-colors">+</button>
                 </div>
                 <span class="text-sm text-gray-600">(2 patches per pack)</span>
               </div>
 
               <!-- Action Buttons -->
               <div class="flex flex-col sm:flex-row gap-4">
-                <button class="flex-1 bg-medical-blue text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-medical-navy transform hover:scale-105 transition-all duration-200 shadow-lg">
+                <button (click)="addToCart()" class="flex-1 bg-medical-blue text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-medical-navy transform hover:scale-105 transition-all duration-200 shadow-lg">
                   Add to Cart
                 </button>
-                <button class="flex-1 border-2 border-medical-blue text-medical-blue px-8 py-4 rounded-lg font-bold text-lg hover:bg-medical-blue hover:text-white transition-all duration-200">
+                <button (click)="buyNow()" class="flex-1 border-2 border-medical-blue text-medical-blue px-8 py-4 rounded-lg font-bold text-lg hover:bg-medical-blue hover:text-white transition-all duration-200">
                   Buy Now
                 </button>
               </div>
