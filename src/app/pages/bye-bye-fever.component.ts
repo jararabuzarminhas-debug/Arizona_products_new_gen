@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ProductFlipImageComponent } from '../components/product-flip-image.component';
 import { CartService } from '../services/cart.service';
 
@@ -432,7 +433,7 @@ export class ByeByeFeverComponent {
     { label: 'Storage & Safety' }
   ];
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   increaseQuantity(): void {
     if (this.quantity() < 10) {
@@ -460,7 +461,6 @@ export class ByeByeFeverComponent {
 
   buyNow(): void {
     this.addToCart();
-    // TODO: Navigate to checkout
-    console.log('Proceeding to checkout...');
+    this.router.navigate(['/checkout']);
   }
 }

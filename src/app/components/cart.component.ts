@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CartService, CartItem } from '../services/cart.service';
 
 @Component({
@@ -116,7 +116,7 @@ import { CartService, CartItem } from '../services/cart.service';
 export class CartComponent {
   isOpen = signal(false);
 
-  constructor(public cartService: CartService) {}
+  constructor(public cartService: CartService, private router: Router) {}
 
   openCart(): void {
     this.isOpen.set(true);
@@ -144,7 +144,6 @@ export class CartComponent {
 
   proceedToCheckout(): void {
     this.closeCart();
-    // TODO: Navigate to checkout page
-    console.log('Proceeding to checkout...');
+    this.router.navigate(['/checkout']);
   }
 }
