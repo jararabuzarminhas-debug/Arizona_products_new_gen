@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProductFlipImageComponent } from '../components/product-flip-image.component';
 
 @Component({
   selector: 'app-shop',
