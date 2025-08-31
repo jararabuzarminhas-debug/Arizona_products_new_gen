@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: 'app-contact',
+  selector: "app-contact",
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
@@ -325,35 +325,35 @@ import { FormsModule } from '@angular/forms';
         </div>
       </div>
     </section>
-  `
+  `,
 })
 export class ContactComponent {
   formData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    district: '',
-    subject: '',
-    message: '',
-    newsletter: false
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    district: "",
+    subject: "",
+    message: "",
+    newsletter: false,
   };
 
   onSubmit() {
-    console.log('Form submitted:', this.formData);
+    console.log("Form submitted:", this.formData);
     // Here you would typically send the form data to your backend
-    alert('Thank you for your message! We will respond within 24 hours.');
-    
+    alert("Thank you for your message! We will respond within 24 hours.");
+
     // Reset form
     this.formData = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      district: '',
-      subject: '',
-      message: '',
-      newsletter: false
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      district: "",
+      subject: "",
+      message: "",
+      newsletter: false,
     };
   }
 }

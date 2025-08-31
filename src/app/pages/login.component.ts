@@ -1,11 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { AuthService, LoginCredentials } from '../services/auth.service';
+import { Component, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { RouterModule, Router } from "@angular/router";
+import { AuthService, LoginCredentials } from "../services/auth.service";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
@@ -111,52 +111,52 @@ import { AuthService, LoginCredentials } from '../services/auth.service';
         </div>
       </div>
     </div>
-  `
+  `,
 })
 export class LoginComponent {
   credentials: LoginCredentials = {
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   };
 
   rememberMe = false;
   showPassword = signal(false);
   isLoading = signal(false);
-  errorMessage = signal('');
+  errorMessage = signal("");
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
   togglePassword(): void {
-    this.showPassword.update(show => !show);
+    this.showPassword.update((show) => !show);
   }
 
   async onSubmit(): Promise<void> {
     if (!this.credentials.email || !this.credentials.password) {
-      this.errorMessage.set('Please fill in all fields');
+      this.errorMessage.set("Please fill in all fields");
       return;
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.errorMessage.set("");
 
     try {
       const result = await this.authService.login(this.credentials);
-      
+
       if (result.success) {
         // Check if user is admin and redirect accordingly
         if (this.authService.isAdmin()) {
-          this.router.navigate(['/admin']);
+          this.router.navigate(["/admin"]);
         } else {
-          this.router.navigate(['/account']);
+          this.router.navigate(["/account"]);
         }
       } else {
         this.errorMessage.set(result.message);
       }
     } catch (error) {
-      this.errorMessage.set('Login failed. Please try again.');
+      this.errorMessage.set("Login failed. Please try again.");
     } finally {
       this.isLoading.set(false);
     }

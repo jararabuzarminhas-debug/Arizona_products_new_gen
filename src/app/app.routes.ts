@@ -1,58 +1,73 @@
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
 
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./pages/home.component').then(m => m.HomeComponent)
+    path: "",
+    loadComponent: () =>
+      import("./pages/home.component").then((m) => m.HomeComponent),
   },
   {
-    path: 'home',
-    redirectTo: '',
-    pathMatch: 'full'
+    path: "home",
+    redirectTo: "",
+    pathMatch: "full",
   },
   {
-    path: 'bye-bye-fever',
-    loadComponent: () => import('./pages/bye-bye-fever.component').then(m => m.ByeByeFeverComponent)
+    path: "bye-bye-fever",
+    loadComponent: () =>
+      import("./pages/bye-bye-fever.component").then(
+        (m) => m.ByeByeFeverComponent,
+      ),
   },
   {
-    path: 'shop',
-    loadComponent: () => import('./pages/shop.component').then(m => m.ShopComponent)
+    path: "shop",
+    loadComponent: () =>
+      import("./pages/shop.component").then((m) => m.ShopComponent),
   },
   {
-    path: 'about',
-    loadComponent: () => import('./pages/about.component').then(m => m.AboutComponent)
+    path: "about",
+    loadComponent: () =>
+      import("./pages/about.component").then((m) => m.AboutComponent),
   },
   {
-    path: 'contact',
-    loadComponent: () => import('./pages/contact.component').then(m => m.ContactComponent)
+    path: "contact",
+    loadComponent: () =>
+      import("./pages/contact.component").then((m) => m.ContactComponent),
   },
   {
-    path: 'testimonials',
-    loadComponent: () => import('./pages/testimonials.component').then(m => m.TestimonialsComponent)
+    path: "testimonials",
+    loadComponent: () =>
+      import("./pages/testimonials.component").then(
+        (m) => m.TestimonialsComponent,
+      ),
   },
   {
-    path: 'checkout',
-    loadComponent: () => import('./pages/checkout.component').then(m => m.CheckoutComponent)
+    path: "checkout",
+    loadComponent: () =>
+      import("./pages/checkout.component").then((m) => m.CheckoutComponent),
   },
   {
-    path: 'login',
-    loadComponent: () => import('./pages/login.component').then(m => m.LoginComponent)
+    path: "login",
+    loadComponent: () =>
+      import("./pages/login.component").then((m) => m.LoginComponent),
   },
   {
-    path: 'register',
-    loadComponent: () => import('./pages/register.component').then(m => m.RegisterComponent)
+    path: "register",
+    loadComponent: () =>
+      import("./pages/register.component").then((m) => m.RegisterComponent),
   },
   {
-    path: 'account',
-    loadComponent: () => import('./pages/account.component').then(m => m.AccountComponent)
+    path: "account",
+    loadComponent: () =>
+      import("./pages/account.component").then((m) => m.AccountComponent),
   },
   {
-    path: 'admin',
-    loadComponent: () => import('./pages/admin.component').then(m => m.AdminComponent)
+    path: "admin",
+    loadComponent: () =>
+      import("./pages/admin.component").then((m) => m.AdminComponent),
   },
   {
-    path: '**',
-    redirectTo: '',
-    pathMatch: 'full'
-  }
+    path: "**",
+    redirectTo: "",
+    pathMatch: "full",
+  },
 ];
