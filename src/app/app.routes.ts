@@ -31,6 +31,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/testimonials.component').then(m => m.TestimonialsComponent)
   },
   {
+    path: 'checkout',
+    loadComponent: () => import('./pages/checkout.component').then(m => m.CheckoutComponent)
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full'
