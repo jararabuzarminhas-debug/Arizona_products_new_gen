@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductFlipImageComponent } from '../components/product-flip-image.component';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-bye-bye-fever',
@@ -421,7 +422,8 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
 })
 export class ByeByeFeverComponent {
   activeTab = 0;
-  
+  quantity = signal(1);
+
   tabs = [
     { label: 'Features' },
     { label: 'How to Use' },
@@ -429,4 +431,36 @@ export class ByeByeFeverComponent {
     { label: 'Ingredients' },
     { label: 'Storage & Safety' }
   ];
+
+  constructor(private cartService: CartService) {}
+
+  increaseQuantity(): void {
+    if (this.quantity() < 10) {
+      this.quantity.update(q => q + 1);
+    }
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity() > 1) {
+      this.quantity.update(q => q - 1);
+    }
+  }
+
+  addToCart(): void {
+    this.cartService.addToCart({
+      id: 'bye-bye-fever-001',
+      name: 'Arizona Bye Bye Fever - Instant Cooling Relief',
+      price: 299,
+      originalPrice: 399,
+      image: 'https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=400',
+      inStock: true,
+      maxQuantity: 10
+    }, this.quantity());
+  }
+
+  buyNow(): void {
+    this.addToCart();
+    // TODO: Navigate to checkout
+    console.log('Proceeding to checkout...');
+  }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductFlipImageComponent } from '../components/product-flip-image.component';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-shop',
@@ -122,7 +123,15 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
                   <span class="text-2xl font-bold text-medical-navy">PKR 299</span>
                   <span class="text-lg text-gray-400 line-through ml-2">PKR 399</span>
                 </div>
-                <button class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors">
+                <button (click)="addToCart({
+                  id: 'bye-bye-fever-001',
+                  name: 'Bye Bye Fever Cooling Patches',
+                  price: 299,
+                  originalPrice: 399,
+                  image: 'https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=400',
+                  inStock: true,
+                  maxQuantity: 10
+                })" class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors">
                   Add to Cart
                 </button>
               </div>
@@ -309,4 +318,18 @@ import { ProductFlipImageComponent } from '../components/product-flip-image.comp
     </section>
   `
 })
-export class ShopComponent {}
+export class ShopComponent {
+  constructor(private cartService: CartService) {}
+
+  addToCart(product: any): void {
+    this.cartService.addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: product.image,
+      inStock: product.inStock,
+      maxQuantity: product.maxQuantity
+    });
+  }
+}
