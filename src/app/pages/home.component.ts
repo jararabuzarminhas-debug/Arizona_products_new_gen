@@ -191,71 +191,32 @@ import { Component } from "@angular/core";
     </section>
 
     <!-- New Certifications Banner with Animation -->
-    <section class="bg-white border-y border-gray-200 py-6 overflow-hidden">
+    <section class="bg-white border-y border-gray-200 py-6">
       <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
           <!-- Left Banner -->
           <div class="lg:col-span-1 text-center lg:text-left">
             <div class="bg-medical-blue text-white rounded-xl p-4">
-              <h3 class="text-lg font-bold mb-2">4 Certificates</h3>
+              <h3 class="text-lg font-bold mb-1">4 Certificates</h3>
               <p class="text-sm text-blue-100">From Global & National Authorities</p>
             </div>
           </div>
-          
-          <!-- Moving Certifications -->
+
+          <!-- Moving Certifications (logos only, spaced, hidden under left banner) -->
           <div class="lg:col-span-3">
-            <div class="animate-scroll flex items-center space-x-8 whitespace-nowrap">
-              <!-- FDA -->
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=100" 
-                     alt="FDA Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">FDA Approved</span>
-              </div>
-
-              <!-- DRAP -->
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=100" 
-                     alt="DRAP Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">DRAP Certified</span>
-              </div>
-
-              <!-- CDA -->
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=100" 
-                     alt="CDA Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">CDA Approved</span>
-              </div>
-
-              <!-- ISO -->
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=100" 
-                     alt="ISO Certified" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">ISO Certified</span>
-              </div>
-
-              <!-- Duplicate for seamless scroll -->
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=100" 
-                     alt="FDA Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">FDA Approved</span>
-              </div>
-
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=100" 
-                     alt="DRAP Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">DRAP Certified</span>
-              </div>
-
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=100" 
-                     alt="CDA Approved" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">CDA Approved</span>
-              </div>
-
-              <div class="flex items-center space-x-3 certification-item">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=100" 
-                     alt="ISO Certified" class="w-16 h-16 object-contain">
-                <span class="font-medium text-gray-700">ISO Certified</span>
+            <div class="relative overflow-hidden">
+              <div class="absolute left-0 top-0 h-full w-24 bg-white"></div>
+              <div class="absolute right-0 top-0 h-full w-24 bg-white"></div>
+              <div class="animate-scroll flex items-center space-x-16">
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160" alt="FDA" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160" alt="DRAP" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160" alt="CDA" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160" alt="ISO" class="h-14 w-auto object-contain shrink-0" />
+                <!-- duplicate sequence for seamless scroll -->
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160" alt="FDA" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160" alt="DRAP" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160" alt="CDA" class="h-14 w-auto object-contain shrink-0" />
+                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160" alt="ISO" class="h-14 w-auto object-contain shrink-0" />
               </div>
             </div>
           </div>
