@@ -189,7 +189,7 @@ interface AddressBookEntry {
 export class AccountComponent {
   activeTab = signal<'profile' | 'orders' | 'addresses' | 'settings'>('orders');
 
-  tabs = [
+  tabs: { id: 'orders' | 'profile' | 'addresses' | 'settings'; label: string }[] = [
     { id: 'orders', label: 'Orders' },
     { id: 'profile', label: 'Profile' },
     { id: 'addresses', label: 'Addresses' },
