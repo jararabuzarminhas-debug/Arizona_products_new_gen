@@ -34,13 +34,6 @@ export const routes: Routes = [
       import("./pages/contact.component").then((m) => m.ContactComponent),
   },
   {
-    path: "testimonials",
-    loadComponent: () =>
-      import("./pages/testimonials.component").then(
-        (m) => m.TestimonialsComponent,
-      ),
-  },
-  {
     path: "checkout",
     loadComponent: () =>
       import("./pages/checkout.component").then((m) => m.CheckoutComponent),

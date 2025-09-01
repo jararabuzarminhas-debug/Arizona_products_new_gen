@@ -1,8 +1,33 @@
-import { Component, signal } from "@angular/core";
+import { Component, signal, computed } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterModule, Router } from "@angular/router";
-import { AuthService, User } from "../services/auth.service";
+import { AuthService } from "../services/auth.service";
+import { CartService } from "../services/cart.service";
+
+interface StoredOrderItem { id: string; name: string; price: number; image: string; quantity: number; }
+interface StoredOrder {
+  id: string;
+  items: StoredOrderItem[];
+  shippingAddress: any;
+  deliveryMethod: string;
+  deliverySlot: string;
+  paymentMethod: string;
+  subtotal: number;
+  shipping: number;
+  codFee: number;
+  total: number;
+  date: string;
+  paymentStatus: string;
+  transactionId?: string;
+  expectedDelivery: string;
+  status?: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "out_for_delivery" | "completed";
+}
+
+interface AddressBookEntry {
+  firstName: string; lastName: string; phone: string; email: string;
+  address: string; city: string; district: string; postalCode: string; deliveryInstructions: string;
+}
 
 @Component({
   selector: "app-account",
@@ -12,342 +37,146 @@ import { AuthService, User } from "../services/auth.service";
     <div class="min-h-screen bg-gray-50 py-8">
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
-          <!-- Account Header -->
           <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
             <div class="flex items-center justify-between">
               <div>
-                <h1 class="text-3xl font-bold text-medical-navy font-medical">
-                  Welcome back, {{ authService.user()?.firstName }}!
-                </h1>
-                <p class="text-gray-600 mt-2">
-                  Manage your account and track your orders
-                </p>
+                <h1 class="text-3xl font-bold text-medical-navy font-medical">My Account</h1>
+                <p class="text-gray-600 mt-1">Manage profile, orders, and addresses</p>
               </div>
-              <button
-                (click)="logout()"
-                class="text-gray-500 hover:text-red-600 transition-colors flex items-center space-x-2"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
+              <button (click)="logout()" class="text-gray-500 hover:text-red-600 transition-colors flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
                 <span>Logout</span>
               </button>
             </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Sidebar Menu -->
             <div class="lg:col-span-1">
               <div class="bg-white rounded-xl p-6 shadow-lg">
                 <nav class="space-y-2">
-                  <button
-                    *ngFor="let tab of tabs"
-                    (click)="activeTab.set(tab.id)"
-                    [class.active]="activeTab() === tab.id"
-                    class="w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-50"
-                    [ngClass]="
-                      activeTab() === tab.id
-                        ? 'bg-medical-blue text-white'
-                        : 'text-gray-700'
-                    "
-                  >
-                    <div class="flex items-center space-x-3">
-                      <svg class="w-5 h-5" [innerHTML]="tab.icon"></svg>
-                      <span>{{ tab.label }}</span>
-                    </div>
+                  <button *ngFor="let tab of tabs" (click)="activeTab.set(tab.id)" class="w-full text-left px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-50" [ngClass]="activeTab() === tab.id ? 'bg-medical-blue text-white' : 'text-gray-700'">
+                    {{ tab.label }}
                   </button>
                 </nav>
               </div>
             </div>
 
-            <!-- Main Content -->
             <div class="lg:col-span-2">
-              <!-- Profile Tab -->
-              <div
-                *ngIf="activeTab() === 'profile'"
-                class="bg-white rounded-xl p-6 shadow-lg"
-              >
-                <h2 class="text-2xl font-bold text-medical-navy mb-6">
-                  Profile Information
-                </h2>
-
-                <form (ngSubmit)="updateProfile()" #profileForm="ngForm">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <!-- Profile -->
+              <div *ngIf="activeTab() === 'profile'" class="bg-white rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold text-medical-navy mb-6">Profile Information</h2>
+                <form (ngSubmit)="updateProfile()" #profileForm="ngForm" class="space-y-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                        >First Name</label
-                      >
-                      <input
-                        type="text"
-                        [(ngModel)]="profileData.firstName"
-                        name="firstName"
-                        required
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                      />
+                      <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                      <input type="text" [(ngModel)]="profileData.firstName" name="firstName" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue" />
                     </div>
                     <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                        >Last Name</label
-                      >
-                      <input
-                        type="text"
-                        [(ngModel)]="profileData.lastName"
-                        name="lastName"
-                        required
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                      />
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                      <input type="text" [(ngModel)]="profileData.lastName" name="lastName" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue" />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input type="email" [(ngModel)]="profileData.email" name="email" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue" />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <input type="tel" [(ngModel)]="profileData.phone" name="phone" required class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue" />
                     </div>
                   </div>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                        >Email</label
-                      >
-                      <input
-                        type="email"
-                        [(ngModel)]="profileData.email"
-                        name="email"
-                        required
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                        >Phone</label
-                      >
-                      <input
-                        type="tel"
-                        [(ngModel)]="profileData.phone"
-                        name="phone"
-                        required
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    [disabled]="isUpdating()"
-                    class="bg-medical-blue text-white px-6 py-3 rounded-lg font-medium hover:bg-medical-navy transition-colors disabled:opacity-50"
-                  >
-                    {{ isUpdating() ? "Updating..." : "Update Profile" }}
-                  </button>
+                  <button type="submit" class="bg-medical-blue text-white px-6 py-3 rounded-lg font-medium hover:bg-medical-navy transition-colors">Update Profile</button>
                 </form>
               </div>
 
-              <!-- Orders Tab -->
-              <div
-                *ngIf="activeTab() === 'orders'"
-                class="bg-white rounded-xl p-6 shadow-lg"
-              >
-                <h2 class="text-2xl font-bold text-medical-navy mb-6">
-                  Order History
-                </h2>
-
-                <div *ngIf="orders.length === 0" class="text-center py-12">
-                  <svg
-                    class="w-24 h-24 mx-auto text-gray-300 mb-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                    <path
-                      fill-rule="evenodd"
-                      d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <h3 class="text-lg font-medium text-gray-900 mb-2">
-                    No orders yet
-                  </h3>
-                  <p class="text-gray-500 mb-6">
-                    Start shopping to see your orders here
-                  </p>
-                  <button
-                    routerLink="/shop"
-                    class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors"
-                  >
-                    Start Shopping
-                  </button>
+              <!-- Orders -->
+              <div *ngIf="activeTab() === 'orders'" class="bg-white rounded-xl p-6 shadow-lg">
+                <div class="flex items-center justify-between mb-6">
+                  <h2 class="text-2xl font-bold text-medical-navy">Order History</h2>
+                  <button (click)="reloadOrders()" class="text-sm text-gray-600 hover:text-medical-blue">Refresh</button>
                 </div>
-
-                <!-- Sample orders would be displayed here -->
-                <div *ngIf="orders.length > 0" class="space-y-4">
-                  <div
-                    *ngFor="let order of orders"
-                    class="border border-gray-200 rounded-lg p-4"
-                  >
-                    <div class="flex items-center justify-between mb-3">
+                <div *ngIf="orders().length === 0" class="text-center py-12">
+                  <h3 class="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
+                  <p class="text-gray-500 mb-6">Start shopping to see your orders here</p>
+                  <a routerLink="/shop" class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors">Start Shopping</a>
+                </div>
+                <div *ngIf="orders().length > 0" class="space-y-4">
+                  <div *ngFor="let order of orders()" class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
                       <div>
-                        <h3 class="font-bold text-medical-navy">
-                          Order #{{ order.id }}
-                        </h3>
-                        <p class="text-sm text-gray-500">
-                          {{ order.date | date }}
-                        </p>
+                        <h3 class="font-bold text-medical-navy">Order {{ order.id }}</h3>
+                        <p class="text-xs text-gray-500">{{ order.date | date:'medium' }}</p>
+                        <p class="text-xs text-gray-600">Status: <span class="font-medium">{{ (order.status || 'processing') | titlecase }}</span> • Payment: {{ order.paymentStatus }}</p>
+                        <p class="text-xs text-gray-600">Expected: {{ order.expectedDelivery }}</p>
                       </div>
-                      <span
-                        class="px-3 py-1 rounded-full text-sm font-medium"
-                        [ngClass]="getOrderStatusClass(order.status)"
-                      >
-                        {{ order.status }}
-                      </span>
+                      <div class="text-right">
+                        <div class="text-lg font-bold text-medical-navy">PKR {{ order.total }}</div>
+                        <div class="mt-2 flex items-center space-x-2">
+                          <button (click)="downloadInvoice(order)" class="text-sm border px-3 py-1 rounded hover:bg-gray-50">Invoice</button>
+                          <button (click)="reorder(order)" class="text-sm bg-medical-blue text-white px-3 py-1 rounded hover:bg-medical-navy">Reorder</button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="text-lg font-bold text-medical-navy">
-                      PKR {{ order.total }}
+                    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div *ngFor="let it of order.items" class="flex items-center space-x-3">
+                        <img [src]="it.image" [alt]="it.name" class="w-12 h-12 object-contain rounded bg-gray-50" />
+                        <div class="flex-1 text-sm text-gray-700">{{ it.name }} × {{ it.quantity }} — PKR {{ it.price * it.quantity }}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Addresses Tab -->
-              <div
-                *ngIf="activeTab() === 'addresses'"
-                class="bg-white rounded-xl p-6 shadow-lg"
-              >
-                <h2 class="text-2xl font-bold text-medical-navy mb-6">
-                  Saved Addresses
-                </h2>
-
-                <div class="text-center py-12">
-                  <svg
-                    class="w-24 h-24 mx-auto text-gray-300 mb-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <h3 class="text-lg font-medium text-gray-900 mb-2">
-                    No saved addresses
-                  </h3>
-                  <p class="text-gray-500 mb-6">
-                    Add an address for faster checkout
-                  </p>
-                  <button
-                    class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors"
-                  >
-                    Add Address
-                  </button>
+              <!-- Addresses -->
+              <div *ngIf="activeTab() === 'addresses'" class="bg-white rounded-xl p-6 shadow-lg">
+                <div class="flex items-center justify-between mb-6">
+                  <h2 class="text-2xl font-bold text-medical-navy">Saved Addresses</h2>
+                  <button (click)="startAdd()" class="bg-medical-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-medical-navy">Add Address</button>
                 </div>
-              </div>
-
-              <!-- Settings Tab -->
-              <div
-                *ngIf="activeTab() === 'settings'"
-                class="bg-white rounded-xl p-6 shadow-lg"
-              >
-                <h2 class="text-2xl font-bold text-medical-navy mb-6">
-                  Account Settings
-                </h2>
-
-                <!-- Change Password -->
-                <div class="mb-8">
-                  <h3 class="text-lg font-bold text-medical-navy mb-4">
-                    Change Password
-                  </h3>
-                  <form (ngSubmit)="changePassword()" #passwordForm="ngForm">
-                    <div class="space-y-4 mb-4">
+                <div *ngIf="addressBook().length === 0" class="text-center py-10 text-gray-500">No saved addresses</div>
+                <div *ngIf="addressBook().length > 0" class="space-y-3">
+                  <div *ngFor="let a of addressBook(); let i = index" class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
                       <div>
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-2"
-                          >Current Password</label
-                        >
-                        <input
-                          type="password"
-                          [(ngModel)]="passwordData.current"
-                          name="currentPassword"
-                          required
-                          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                        />
+                        <div class="font-medium text-gray-900">{{ a.firstName }} {{ a.lastName }} — {{ a.city }}, {{ a.district | titlecase }}</div>
+                        <div class="text-sm text-gray-600">{{ a.address }}, {{ a.postalCode }}</div>
+                        <div class="text-sm text-gray-600">{{ a.phone }} • {{ a.email }}</div>
                       </div>
-                      <div>
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-2"
-                          >New Password</label
-                        >
-                        <input
-                          type="password"
-                          [(ngModel)]="passwordData.new"
-                          name="newPassword"
-                          required
-                          minlength="6"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-2"
-                          >Confirm New Password</label
-                        >
-                        <input
-                          type="password"
-                          [(ngModel)]="passwordData.confirm"
-                          name="confirmPassword"
-                          required
-                          class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue"
-                        />
+                      <div class="space-x-2">
+                        <button (click)="editAddress(i)" class="text-sm border px-3 py-1 rounded hover:bg-gray-50">Edit</button>
+                        <button (click)="deleteAddress(i)" class="text-sm border px-3 py-1 rounded hover:bg-red-50 text-red-600">Delete</button>
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      [disabled]="isChangingPassword()"
-                      class="bg-medical-blue text-white px-6 py-3 rounded-lg font-medium hover:bg-medical-navy transition-colors disabled:opacity-50"
-                    >
-                      {{
-                        isChangingPassword() ? "Changing..." : "Change Password"
-                      }}
-                    </button>
+                  </div>
+                </div>
+
+                <!-- Address Form -->
+                <div *ngIf="editingIndex() > -1 || adding()" class="mt-6 border-t pt-6">
+                  <h3 class="font-bold text-medical-navy mb-3">{{ adding() ? 'Add New Address' : 'Edit Address' }}</h3>
+                  <form (ngSubmit)="saveAddressForm()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input class="px-3 py-2 border rounded" placeholder="First Name" [(ngModel)]="form.firstName" name="fn" required />
+                    <input class="px-3 py-2 border rounded" placeholder="Last Name" [(ngModel)]="form.lastName" name="ln" required />
+                    <input class="px-3 py-2 border rounded" placeholder="Phone" [(ngModel)]="form.phone" name="ph" required />
+                    <input class="px-3 py-2 border rounded" placeholder="Email" [(ngModel)]="form.email" name="em" required />
+                    <input class="px-3 py-2 border rounded md:col-span-2" placeholder="Address" [(ngModel)]="form.address" name="ad" required />
+                    <input class="px-3 py-2 border rounded" placeholder="City" [(ngModel)]="form.city" name="ct" required />
+                    <input class="px-3 py-2 border rounded" placeholder="District" [(ngModel)]="form.district" name="ds" required />
+                    <input class="px-3 py-2 border rounded" placeholder="Postal Code" [(ngModel)]="form.postalCode" name="pc" />
+                    <input class="px-3 py-2 border rounded md:col-span-2" placeholder="Delivery Instructions" [(ngModel)]="form.deliveryInstructions" name="di" />
+                    <div class="md:col-span-2 flex items-center space-x-2">
+                      <button type="submit" class="bg-medical-blue text-white px-4 py-2 rounded-lg">Save</button>
+                      <button type="button" (click)="cancelEdit()" class="border px-4 py-2 rounded">Cancel</button>
+                    </div>
                   </form>
                 </div>
+              </div>
 
-                <!-- Notification Preferences -->
-                <div>
-                  <h3 class="text-lg font-bold text-medical-navy mb-4">
-                    Notification Preferences
-                  </h3>
-                  <div class="space-y-3">
-                    <label class="flex items-center">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="notificationSettings.email"
-                        class="h-4 w-4 text-medical-blue focus:ring-medical-blue border-gray-300 rounded"
-                      />
-                      <span class="ml-3 text-gray-700"
-                        >Email notifications</span
-                      >
-                    </label>
-                    <label class="flex items-center">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="notificationSettings.sms"
-                        class="h-4 w-4 text-medical-blue focus:ring-medical-blue border-gray-300 rounded"
-                      />
-                      <span class="ml-3 text-gray-700">SMS notifications</span>
-                    </label>
-                    <label class="flex items-center">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="notificationSettings.newsletter"
-                        class="h-4 w-4 text-medical-blue focus:ring-medical-blue border-gray-300 rounded"
-                      />
-                      <span class="ml-3 text-gray-700"
-                        >Newsletter subscription</span
-                      >
-                    </label>
-                  </div>
+              <!-- Settings -->
+              <div *ngIf="activeTab() === 'settings'" class="bg-white rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold text-medical-navy mb-6">Notification Preferences</h2>
+                <div class="space-y-3">
+                  <label class="flex items-center"><input type="checkbox" [(ngModel)]="notificationSettings.email" class="h-4 w-4 text-medical-blue rounded" /><span class="ml-3 text-gray-700">Email notifications</span></label>
+                  <label class="flex items-center"><input type="checkbox" [(ngModel)]="notificationSettings.sms" class="h-4 w-4 text-medical-blue rounded" /><span class="ml-3 text-gray-700">SMS notifications</span></label>
+                  <label class="flex items-center"><input type="checkbox" [(ngModel)]="notificationSettings.newsletter" class="h-4 w-4 text-medical-blue rounded" /><span class="ml-3 text-gray-700">Newsletter subscription</span></label>
                 </div>
               </div>
             </div>
@@ -358,133 +187,101 @@ import { AuthService, User } from "../services/auth.service";
   `,
 })
 export class AccountComponent {
-  activeTab = signal("profile");
-  isUpdating = signal(false);
-  isChangingPassword = signal(false);
+  activeTab = signal<'profile' | 'orders' | 'addresses' | 'settings'>('orders');
 
-  profileData = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  };
+  orders = signal<StoredOrder[]>([]);
+  addressBook = signal<AddressBookEntry[]>([]);
 
-  passwordData = {
-    current: "",
-    new: "",
-    confirm: "",
-  };
+  adding = signal(false);
+  editingIndex = signal<number>(-1);
+  form: AddressBookEntry = { firstName: '', lastName: '', phone: '', email: '', address: '', city: '', district: '', postalCode: '', deliveryInstructions: '' };
 
-  notificationSettings = {
-    email: true,
-    sms: true,
-    newsletter: false,
-  };
+  profileData = { firstName: '', lastName: '', email: '', phone: '' };
+  notificationSettings = { email: true, sms: true, newsletter: false };
 
-  orders: any[] = []; // Sample orders would be loaded here
-
-  tabs = [
-    {
-      id: "profile",
-      label: "Profile",
-      icon: '<path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>',
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      icon: '<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>',
-    },
-    {
-      id: "addresses",
-      label: "Addresses",
-      icon: '<path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>',
-    },
-    {
-      id: "settings",
-      label: "Settings",
-      icon: '<path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>',
-    },
-  ];
-
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-  ) {
-    this.loadProfileData();
+  constructor(public authService: AuthService, private router: Router, private cart: CartService) {
+    this.loadProfile();
+    this.reloadOrders();
+    this.loadAddressBook();
   }
 
-  loadProfileData(): void {
-    const user = this.authService.user();
-    if (user) {
-      this.profileData = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-      };
+  loadProfile(): void {
+    const u = this.authService.user();
+    if (u) {
+      this.profileData = { firstName: u.firstName, lastName: u.lastName, email: u.email, phone: u.phone };
     }
+  }
+
+  reloadOrders(): void {
+    try {
+      const raw = localStorage.getItem('orders');
+      const list: StoredOrder[] = raw ? JSON.parse(raw) : [];
+      // newest first
+      list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      this.orders.set(list);
+    } catch { this.orders.set([]); }
+  }
+
+  downloadInvoice(order: StoredOrder): void {
+    const win = window.open('', '_blank');
+    if (!win) return;
+    const rows = order.items.map(i => `<tr><td>${i.name}</td><td style='text-align:center'>${i.quantity}</td><td style='text-align:right'>PKR ${i.price}</td><td style='text-align:right'>PKR ${i.price * i.quantity}</td></tr>`).join('');
+    win.document.write(`
+      <html><head><title>Invoice ${order.id}</title>
+      <style>body{font-family:Inter,Arial,sans-serif;padding:24px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #e5e7eb;padding:8px} th{background:#f8fafc;text-align:left}</style>
+      </head><body>
+        <h2>Arizona Health Care Products</h2>
+        <p><strong>Invoice:</strong> ${order.id}<br/>
+        <strong>Date:</strong> ${new Date(order.date).toLocaleString()}<br/>
+        <strong>Payment:</strong> ${order.paymentStatus}</p>
+        <h3>Bill To</h3>
+        <p>${order.shippingAddress.firstName} ${order.shippingAddress.lastName}<br/>
+        ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.district} ${order.shippingAddress.postalCode}<br/>
+        ${order.shippingAddress.phone} • ${order.shippingAddress.email}</p>
+        <table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead><tbody>${rows}</tbody></table>
+        <p style='text-align:right;margin-top:12px'>Subtotal: <strong>PKR ${order.subtotal}</strong><br/>Shipping: <strong>PKR ${order.shipping}</strong>${order.codFee ? `<br/>COD Fee: <strong>PKR ${order.codFee}</strong>` : ''}<br/>Grand Total: <strong>PKR ${order.total}</strong></p>
+        <script>window.print();</script>
+      </body></html>`);
+    win.document.close();
+  }
+
+  reorder(order: StoredOrder): void {
+    for (const it of order.items) {
+      this.cart.addToCart({ id: it.id, name: it.name, price: it.price, image: it.image, inStock: true }, it.quantity);
+    }
+    this.router.navigate(['/checkout']);
+  }
+
+  loadAddressBook(): void {
+    try { this.addressBook.set(JSON.parse(localStorage.getItem('addressBook') || '[]')); } catch { this.addressBook.set([]); }
+  }
+
+  saveAddressBook(): void {
+    localStorage.setItem('addressBook', JSON.stringify(this.addressBook()));
+  }
+
+  startAdd(): void { this.adding.set(true); this.editingIndex.set(-1); this.form = { firstName: '', lastName: '', phone: '', email: '', address: '', city: '', district: '', postalCode: '', deliveryInstructions: '' }; }
+  editAddress(i: number): void { this.editingIndex.set(i); this.adding.set(false); this.form = { ...this.addressBook()[i] }; }
+  cancelEdit(): void { this.adding.set(false); this.editingIndex.set(-1); }
+
+  saveAddressForm(): void {
+    const list = [...this.addressBook()];
+    const idx = this.editingIndex();
+    if (idx > -1) list[idx] = { ...this.form }; else list.push({ ...this.form });
+    this.addressBook.set(list);
+    this.saveAddressBook();
+    this.cancelEdit();
+  }
+
+  deleteAddress(i: number): void {
+    const list = this.addressBook().filter((_, idx) => idx !== i);
+    this.addressBook.set(list); this.saveAddressBook();
   }
 
   async updateProfile(): Promise<void> {
-    this.isUpdating.set(true);
-
-    try {
-      const result = await this.authService.updateProfile(this.profileData);
-      if (result.success) {
-        alert("Profile updated successfully!");
-      } else {
-        alert("Failed to update profile: " + result.message);
-      }
-    } catch (error) {
-      alert("Failed to update profile");
-    } finally {
-      this.isUpdating.set(false);
-    }
+    const res = await this.authService.updateProfile(this.profileData);
+    alert(res.message);
   }
 
-  async changePassword(): Promise<void> {
-    if (this.passwordData.new !== this.passwordData.confirm) {
-      alert("New passwords do not match");
-      return;
-    }
-
-    this.isChangingPassword.set(true);
-
-    try {
-      const result = await this.authService.changePassword(
-        this.passwordData.current,
-        this.passwordData.new,
-      );
-      if (result.success) {
-        alert("Password changed successfully!");
-        this.passwordData = { current: "", new: "", confirm: "" };
-      } else {
-        alert("Failed to change password: " + result.message);
-      }
-    } catch (error) {
-      alert("Failed to change password");
-    } finally {
-      this.isChangingPassword.set(false);
-    }
-  }
-
-  getOrderStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
-      case "delivered":
-        return "bg-green-100 text-green-800";
-      case "shipped":
-        return "bg-blue-100 text-blue-800";
-      case "processing":
-        return "bg-yellow-100 text-yellow-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(["/"]);
-  }
+  logout(): void { this.authService.logout(); this.router.navigate(['/']); }
 }

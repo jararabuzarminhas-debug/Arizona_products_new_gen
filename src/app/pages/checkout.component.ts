@@ -1,4 +1,4 @@
-import { Component, signal, computed } from "@angular/core";
+import { Component, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterModule, Router } from "@angular/router";
@@ -20,9 +20,7 @@ type DeliveryMethod = "home" | "express" | "pickup";
 
 type PaymentType = "cod" | "jazzcash" | "easypaisa" | "bank_transfer" | "card";
 
-interface PaymentMethod {
-  type: PaymentType;
-}
+interface PaymentMethod { type: PaymentType; }
 
 interface PlacedOrder {
   id: string;
@@ -39,6 +37,7 @@ interface PlacedOrder {
   paymentStatus: "Pending" | "Paid";
   transactionId?: string;
   expectedDelivery: string;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "out_for_delivery" | "completed";
 }
 
 @Component({
@@ -49,7 +48,6 @@ interface PlacedOrder {
     <div class="min-h-screen bg-gray-50 py-8">
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
-          <!-- Checkout Header -->
           <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-medical-navy font-medical mb-4">Checkout</h1>
             <div class="flex items-center justify-center space-x-4">
@@ -71,11 +69,8 @@ interface PlacedOrder {
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" *ngIf="!orderPlaced()">
-            <!-- Steps Left -->
             <div class="lg:col-span-2">
-              <!-- Step 1: Shipping -->
               <div *ngIf="step() === 1" class="space-y-6">
-                <!-- Delivery Address -->
                 <div class="bg-white rounded-xl p-6 shadow-lg">
                   <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-medical-navy">Shipping Information</h2>
@@ -151,7 +146,6 @@ interface PlacedOrder {
                   </div>
                 </div>
 
-                <!-- Delivery Options -->
                 <div class="bg-white rounded-xl p-6 shadow-lg">
                   <h2 class="text-xl font-bold text-medical-navy mb-4">Delivery Options</h2>
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -217,12 +211,10 @@ interface PlacedOrder {
                 </div>
               </div>
 
-              <!-- Step 2: Payment -->
               <div *ngIf="step() === 2" class="space-y-6">
                 <div class="bg-white rounded-xl p-6 shadow-lg">
                   <h2 class="text-xl font-bold text-medical-navy mb-6">Payment Method</h2>
                   <div class="space-y-4">
-                    <!-- COD -->
                     <label class="border border-gray-200 rounded-lg p-4 flex items-start cursor-pointer" [class.border-medical-blue]="paymentMethod.type === 'cod'">
                       <input type="radio" [(ngModel)]="paymentMethod.type" name="paymentType" value="cod" class="mt-1 w-4 h-4 text-medical-blue" />
                       <div class="ml-3 flex-1">
@@ -234,7 +226,6 @@ interface PlacedOrder {
                       </div>
                     </label>
 
-                    <!-- JazzCash -->
                     <label class="border border-gray-200 rounded-lg p-4 flex items-start cursor-pointer" [class.border-medical-blue]="paymentMethod.type === 'jazzcash'">
                       <input type="radio" [(ngModel)]="paymentMethod.type" name="paymentType" value="jazzcash" class="mt-1 w-4 h-4 text-medical-blue" />
                       <div class="ml-3 flex-1">
@@ -250,7 +241,6 @@ interface PlacedOrder {
                       </div>
                     </label>
 
-                    <!-- EasyPaisa -->
                     <label class="border border-gray-200 rounded-lg p-4 flex items-start cursor-pointer" [class.border-medical-blue]="paymentMethod.type === 'easypaisa'">
                       <input type="radio" [(ngModel)]="paymentMethod.type" name="paymentType" value="easypaisa" class="mt-1 w-4 h-4 text-medical-blue" />
                       <div class="ml-3 flex-1">
@@ -266,7 +256,6 @@ interface PlacedOrder {
                       </div>
                     </label>
 
-                    <!-- Bank Transfer -->
                     <label class="border border-gray-200 rounded-lg p-4 flex items-start cursor-pointer" [class.border-medical-blue]="paymentMethod.type === 'bank_transfer'">
                       <input type="radio" [(ngModel)]="paymentMethod.type" name="paymentType" value="bank_transfer" class="mt-1 w-4 h-4 text-medical-blue" />
                       <div class="ml-3 flex-1">
@@ -275,22 +264,10 @@ interface PlacedOrder {
                           <span class="text-sm text-gray-500">24h verification</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mt-3 text-sm">
-                          <div class="bg-gray-50 rounded-lg p-3">
-                            <div class="text-gray-500">Bank</div>
-                            <div class="font-medium">{{ BANK_DETAILS.bankName }}</div>
-                          </div>
-                          <div class="bg-gray-50 rounded-lg p-3">
-                            <div class="text-gray-500">Account Name</div>
-                            <div class="font-medium">{{ BANK_DETAILS.accountName }}</div>
-                          </div>
-                          <div class="bg-gray-50 rounded-lg p-3">
-                            <div class="text-gray-500">Account No./IBAN</div>
-                            <div class="font-medium break-all">{{ BANK_DETAILS.accountNumber }}</div>
-                          </div>
-                          <div class="bg-gray-50 rounded-lg p-3">
-                            <div class="text-gray-500">Branch Code</div>
-                            <div class="font-medium">{{ BANK_DETAILS.branchCode }}</div>
-                          </div>
+                          <div class="bg-gray-50 rounded-lg p-3"><div class="text-gray-500">Bank</div><div class="font-medium">Habib Bank Limited (HBL)</div></div>
+                          <div class="bg-gray-50 rounded-lg p-3"><div class="text-gray-500">Account Name</div><div class="font-medium">Arizona Health Care Products</div></div>
+                          <div class="bg-gray-50 rounded-lg p-3"><div class="text-gray-500">Account No./IBAN</div><div class="font-medium break-all">PK00HABB0000000000000000</div></div>
+                          <div class="bg-gray-50 rounded-lg p-3"><div class="text-gray-500">Branch Code</div><div class="font-medium">0001</div></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                           <input type="text" [(ngModel)]="paymentDetails.bank.reference" placeholder="Payment Reference/Remarks" class="px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-medical-blue" />
@@ -299,7 +276,6 @@ interface PlacedOrder {
                       </div>
                     </label>
 
-                    <!-- Cards -->
                     <label class="border border-gray-200 rounded-lg p-4 flex items-start cursor-pointer" [class.border-medical-blue]="paymentMethod.type === 'card'">
                       <input type="radio" [(ngModel)]="paymentMethod.type" name="paymentType" value="card" class="mt-1 w-4 h-4 text-medical-blue" />
                       <div class="ml-3 flex-1 w-full">
@@ -323,7 +299,6 @@ interface PlacedOrder {
                 </div>
               </div>
 
-              <!-- Step 3: Review -->
               <div *ngIf="step() === 3" class="space-y-6">
                 <div class="bg-white rounded-xl p-6 shadow-lg">
                   <h2 class="text-xl font-bold text-medical-navy mb-4">Order Review</h2>
@@ -358,11 +333,9 @@ interface PlacedOrder {
               </div>
             </div>
 
-            <!-- Order Summary -->
             <div class="lg:col-span-1">
               <div class="bg-white rounded-xl p-6 shadow-lg sticky top-8">
                 <h2 class="text-xl font-bold text-medical-navy mb-6">Order Summary</h2>
-
                 <div class="space-y-4 mb-6">
                   <div *ngFor="let item of cartService.items()" class="flex items-center space-x-3">
                     <img [src]="item.image" [alt]="item.name" class="w-16 h-16 object-contain rounded-lg bg-gray-50" />
@@ -373,52 +346,27 @@ interface PlacedOrder {
                     </div>
                   </div>
                 </div>
-
                 <div class="border-t border-gray-200 pt-4 space-y-2">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Subtotal</span>
-                    <span class="font-medium">PKR {{ cartService.subtotal() }}</span>
-                  </div>
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Shipping</span>
-                    <span class="font-medium">
-                      <span *ngIf="shippingCost() === 0" class="text-healthcare-green">FREE</span>
-                      <span *ngIf="shippingCost() > 0">PKR {{ shippingCost() }}</span>
-                    </span>
-                  </div>
-                  <div *ngIf="paymentMethod.type === 'cod'" class="flex justify-between text-sm">
-                    <span class="text-gray-600">COD Fee</span>
-                    <span class="font-medium">PKR 50</span>
-                  </div>
-                  <div class="flex justify-between text-lg font-bold text-medical-navy border-t pt-2">
-                    <span>Total</span>
-                    <span>PKR {{ finalTotal() }}</span>
-                  </div>
+                  <div class="flex justify-between text-sm"><span class="text-gray-600">Subtotal</span><span class="font-medium">PKR {{ cartService.subtotal() }}</span></div>
+                  <div class="flex justify-between text-sm"><span class="text-gray-600">Shipping</span><span class="font-medium"><span *ngIf="shippingCost() === 0" class="text-healthcare-green">FREE</span><span *ngIf="shippingCost() > 0">PKR {{ shippingCost() }}</span></span></div>
+                  <div *ngIf="paymentMethod.type === 'cod'" class="flex justify-between text-sm"><span class="text-gray-600">COD Fee</span><span class="font-medium">PKR 50</span></div>
+                  <div class="flex justify-between text-lg font-bold text-medical-navy border-t pt-2"><span>Total</span><span>PKR {{ finalTotal() }}</span></div>
                 </div>
-
-                <div class="flex items-center justify-center mt-4 text-sm text-gray-500">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                  Secure Checkout
-                </div>
+                <div class="flex items-center justify-center mt-4 text-sm text-gray-500"><svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>Secure Checkout</div>
               </div>
             </div>
           </div>
 
-          <!-- Confirmation -->
           <div *ngIf="orderPlaced()" class="max-w-3xl mx-auto">
             <div class="bg-white rounded-xl p-8 shadow-lg text-center">
-              <div class="mx-auto w-16 h-16 rounded-full bg-healthcare-green/10 flex items-center justify-center mb-4">
-                <svg class="w-8 h-8 text-healthcare-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-              </div>
+              <div class="mx-auto w-16 h-16 rounded-full bg-healthcare-green/10 flex items-center justify-center mb-4"><svg class="w-8 h-8 text-healthcare-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg></div>
               <h2 class="text-2xl font-bold text-medical-navy mb-2">Order Confirmed</h2>
               <p class="text-gray-700">Order Number: <span class="font-mono font-bold">{{ placedOrder()?.id }}</span></p>
               <p class="text-gray-700">Payment Status: <span class="font-medium">{{ placedOrder()?.paymentStatus }}</span></p>
               <p class="text-gray-700">Expected Delivery: <span class="font-medium">{{ placedOrder()?.expectedDelivery }}</span></p>
               <div class="mt-6 text-left">
                 <h3 class="font-medium text-gray-900 mb-2">Order Details</h3>
-                <ul class="space-y-1 text-sm text-gray-700">
-                  <li *ngFor="let it of placedOrder()?.items">- {{ it.name }} × {{ it.quantity }} — PKR {{ it.price * it.quantity }}</li>
-                </ul>
+                <ul class="space-y-1 text-sm text-gray-700"><li *ngFor="let it of placedOrder()?.items">- {{ it.name }} × {{ it.quantity }} — PKR {{ it.price * it.quantity }}</li></ul>
                 <div class="mt-4 border-t pt-3 text-sm">
                   <div class="flex justify-between"><span>Subtotal</span><span>PKR {{ placedOrder()?.subtotal }}</span></div>
                   <div class="flex justify-between"><span>Shipping</span><span>PKR {{ placedOrder()?.shipping }}</span></div>
@@ -426,9 +374,7 @@ interface PlacedOrder {
                   <div class="flex justify-between font-bold text-medical-navy"><span>Total</span><span>PKR {{ placedOrder()?.total }}</span></div>
                 </div>
               </div>
-              <div class="mt-8 flex items-center justify-center space-x-3 text-sm text-gray-600">
-                <span>You'll receive an SMS and email confirmation with tracking details.</span>
-              </div>
+              <div class="mt-8 text-sm text-gray-600">You'll receive an SMS and email with tracking details.</div>
               <div class="mt-6 flex items-center justify-center space-x-3">
                 <a routerLink="/" class="bg-medical-blue text-white px-6 py-3 rounded-lg font-medium hover:bg-medical-navy transition-colors">Continue Shopping</a>
                 <a routerLink="/account?tab=orders" class="border-2 border-medical-blue text-medical-blue px-6 py-3 rounded-lg font-medium hover:bg-medical-blue hover:text-white transition-colors">View Orders</a>
@@ -444,17 +390,7 @@ export class CheckoutComponent {
   step = signal<number>(1);
   placing = signal(false);
 
-  shippingAddress: ShippingAddress = {
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    district: "",
-    postalCode: "",
-    deliveryInstructions: "",
-  };
+  shippingAddress: ShippingAddress = { firstName: "", lastName: "", phone: "", email: "", address: "", city: "", district: "", postalCode: "", deliveryInstructions: "" };
 
   addressBook: ShippingAddress[] = [];
   selectedBookIndex: number | string = -1;
@@ -465,164 +401,36 @@ export class CheckoutComponent {
 
   paymentMethod: PaymentMethod = { type: "cod" };
 
-  paymentDetails = {
-    jazzcash: { mobile: "", cnic: "", transactionId: "" },
-    easypaisa: { mobile: "", cnic: "", transactionId: "" },
-    bank: { reference: "", transactionId: "" },
-    card: { cardNumber: "", expiry: "", cvc: "" },
-  };
-
-  readonly BANK_DETAILS = {
-    bankName: "Habib Bank Limited (HBL)",
-    accountName: "Arizona Health Care Products",
-    accountNumber: "PK00HABB0000000000000000",
-    branchCode: "0001",
-  };
+  paymentDetails = { jazzcash: { mobile: "", cnic: "", transactionId: "" }, easypaisa: { mobile: "", cnic: "", transactionId: "" }, bank: { reference: "", transactionId: "" }, card: { cardNumber: "", expiry: "", cvc: "" } };
 
   acceptTerms = false;
   orderPlaced = signal(false);
   placedOrder = signal<PlacedOrder | null>(null);
 
-  private readonly MAJOR_CITIES = new Set([
-    "lahore",
-    "rawalpindi",
-    "faisalabad",
-    "multan",
-    "gujranwala",
-    "sialkot",
-  ]);
+  private readonly MAJOR_CITIES = new Set(["lahore","rawalpindi","faisalabad","multan","gujranwala","sialkot"]);
 
-  constructor(public cartService: CartService, private router: Router) {
-    this.loadAddressBook();
-  }
+  constructor(public cartService: CartService, private router: Router) { this.loadAddressBook(); }
 
-  // Address book
-  loadAddressBook(): void {
-    try {
-      const raw = localStorage.getItem("addressBook");
-      this.addressBook = raw ? (JSON.parse(raw) as ShippingAddress[]) : [];
-    } catch {
-      this.addressBook = [];
-    }
-  }
+  loadAddressBook(): void { try { const raw = localStorage.getItem("addressBook"); this.addressBook = raw ? JSON.parse(raw) : []; } catch { this.addressBook = []; } }
+  saveToAddressBook(): void { if (!this.saveAddress) return; try { const list = [...this.addressBook, { ...this.shippingAddress }]; this.addressBook = list; localStorage.setItem("addressBook", JSON.stringify(list)); } catch {} }
+  applyAddressFromBook(): void { const idx = Number(this.selectedBookIndex); if (!isNaN(idx) && idx >= 0 && idx < this.addressBook.length) { this.shippingAddress = { ...this.addressBook[idx] }; } }
 
-  saveToAddressBook(): void {
-    if (!this.saveAddress) return;
-    try {
-      const list = [...this.addressBook, { ...this.shippingAddress }];
-      this.addressBook = list;
-      localStorage.setItem("addressBook", JSON.stringify(list));
-    } catch {}
-  }
+  isMajorCity(): boolean { return this.MAJOR_CITIES.has((this.shippingAddress.district || "").toLowerCase()); }
+  homeDeliveryCost(): number { return this.isMajorCity() ? 150 : 300; }
+  shippingCost(): number { switch (this.deliveryMethod) { case "home": return this.homeDeliveryCost(); case "express": return 500; case "pickup": return 0; } }
+  finalTotal(): number { const subtotal = this.cartService.subtotal(); const shipping = this.shippingCost(); const codFee = this.paymentMethod.type === "cod" ? 50 : 0; return subtotal + shipping + codFee; }
 
-  applyAddressFromBook(): void {
-    const idx = Number(this.selectedBookIndex);
-    if (!isNaN(idx) && idx >= 0 && idx < this.addressBook.length) {
-      this.shippingAddress = { ...this.addressBook[idx] };
-    }
-  }
+  isShippingValid(): boolean { const s = this.shippingAddress; return !!(s.firstName && s.lastName && s.phone && s.email && s.address && s.city && s.district && this.deliverySlot); }
+  isPaymentValid(): boolean { switch (this.paymentMethod.type) { case "cod": return true; case "jazzcash": return !!this.paymentDetails.jazzcash.mobile; case "easypaisa": return !!this.paymentDetails.easypaisa.mobile; case "bank_transfer": return true; case "card": return !!(this.paymentDetails.card.cardNumber && this.paymentDetails.card.expiry && this.paymentDetails.card.cvc); } }
+  goToStep(n: number): void { if (n === 2 && !this.isShippingValid()) return; if (n === 3 && !this.isPaymentValid()) return; this.step.set(n); if (n === 2 && this.saveAddress) this.saveToAddressBook(); }
 
-  // Shipping and totals
-  isMajorCity(): boolean {
-    return this.MAJOR_CITIES.has((this.shippingAddress.district || "").toLowerCase());
-  }
+  deliveryLabel(): string { switch (this.deliveryMethod) { case "home": return `Home delivery (${this.homeDeliveryCost()} PKR, 1–2 days)`; case "express": return "Express delivery (PKR 500, same day)"; case "pickup": return "Pickup from nearest distributor (FREE)"; } }
+  paymentLabel(): string { switch (this.paymentMethod.type) { case "cod": return "Cash on Delivery (+ PKR 50 COD fee)"; case "jazzcash": return `JazzCash${this.paymentDetails.jazzcash.transactionId ? ` — TX: ${this.paymentDetails.jazzcash.transactionId}` : ""}`; case "easypaisa": return `EasyPaisa${this.paymentDetails.easypaisa.transactionId ? ` — TX: ${this.paymentDetails.easypaisa.transactionId}` : ""}`; case "bank_transfer": return "Bank Transfer (manual verification within 24h)"; case "card": return "Credit/Debit Card (3D Secure)"; } }
+  expectedDelivery(): string { const now = new Date(); const addDays = (d: number) => { const dt = new Date(now); dt.setDate(dt.getDate() + d); return dt.toDateString(); }; if (this.deliveryMethod === "pickup") return now.toDateString(); if (this.deliveryMethod === "express" && this.isMajorCity()) return now.toDateString(); if (this.deliveryMethod === "home") return addDays(this.isMajorCity() ? 1 : 2); return addDays(2); }
 
-  homeDeliveryCost(): number {
-    return this.isMajorCity() ? 150 : 300;
-  }
-
-  shippingCost(): number {
-    switch (this.deliveryMethod) {
-      case "home":
-        return this.homeDeliveryCost();
-      case "express":
-        return 500;
-      case "pickup":
-        return 0;
-    }
-  }
-
-  finalTotal(): number {
-    const subtotal = this.cartService.subtotal();
-    const shipping = this.shippingCost();
-    const codFee = this.paymentMethod.type === "cod" ? 50 : 0;
-    return subtotal + shipping + codFee;
-  }
-
-  // Validation and navigation
-  isShippingValid(): boolean {
-    const s = this.shippingAddress;
-    return !!(s.firstName && s.lastName && s.phone && s.email && s.address && s.city && s.district && this.deliverySlot);
-  }
-
-  isPaymentValid(): boolean {
-    switch (this.paymentMethod.type) {
-      case "cod":
-        return true;
-      case "jazzcash":
-        return !!this.paymentDetails.jazzcash.mobile;
-      case "easypaisa":
-        return !!this.paymentDetails.easypaisa.mobile;
-      case "bank_transfer":
-        return true; // manual verification later
-      case "card":
-        return !!(this.paymentDetails.card.cardNumber && this.paymentDetails.card.expiry && this.paymentDetails.card.cvc);
-    }
-  }
-
-  goToStep(n: number): void {
-    if (n === 2 && !this.isShippingValid()) return;
-    if (n === 3 && !this.isPaymentValid()) return;
-    this.step.set(n);
-    if (n === 2 && this.saveAddress) this.saveToAddressBook();
-  }
-
-  // Labels and dates
-  deliveryLabel(): string {
-    switch (this.deliveryMethod) {
-      case "home":
-        return `Home delivery (${this.homeDeliveryCost()} PKR, 1–2 days)`;
-      case "express":
-        return "Express delivery (PKR 500, same day)";
-      case "pickup":
-        return "Pickup from nearest distributor (FREE)";
-    }
-  }
-
-  paymentLabel(): string {
-    switch (this.paymentMethod.type) {
-      case "cod":
-        return "Cash on Delivery (+ PKR 50 COD fee)";
-      case "jazzcash":
-        return `JazzCash${this.paymentDetails.jazzcash.transactionId ? ` — TX: ${this.paymentDetails.jazzcash.transactionId}` : ""}`;
-      case "easypaisa":
-        return `EasyPaisa${this.paymentDetails.easypaisa.transactionId ? ` — TX: ${this.paymentDetails.easypaisa.transactionId}` : ""}`;
-      case "bank_transfer":
-        return "Bank Transfer (manual verification within 24h)";
-      case "card":
-        return "Credit/Debit Card (3D Secure)";
-    }
-  }
-
-  expectedDelivery(): string {
-    const now = new Date();
-    const addDays = (d: number) => {
-      const dt = new Date(now);
-      dt.setDate(dt.getDate() + d);
-      return dt.toDateString();
-    };
-
-    if (this.deliveryMethod === "pickup") return now.toDateString();
-    if (this.deliveryMethod === "express" && this.isMajorCity()) return now.toDateString();
-    if (this.deliveryMethod === "home") return addDays(this.isMajorCity() ? 1 : 2);
-    return addDays(2);
-  }
-
-  // Place order
   placeOrder(): void {
     if (!this.isShippingValid() || !this.isPaymentValid() || !this.acceptTerms) return;
     this.placing.set(true);
-
     setTimeout(() => {
       const id = this.generateOrderId();
       const txId = this.ensureTransactionId();
@@ -641,48 +449,13 @@ export class CheckoutComponent {
         paymentStatus: this.paymentMethod.type === "cod" ? "Pending" : "Paid",
         transactionId: txId || undefined,
         expectedDelivery: this.expectedDelivery(),
+        status: this.paymentMethod.type === "cod" ? 'pending' : 'processing',
       };
-
-      try {
-        const raw = localStorage.getItem("orders");
-        const list = raw ? JSON.parse(raw) : [];
-        list.push(order);
-        localStorage.setItem("orders", JSON.stringify(list));
-      } catch {}
-
-      this.placedOrder.set(order);
-      this.orderPlaced.set(true);
-      this.cartService.clearCart();
-      this.placing.set(false);
+      try { const raw = localStorage.getItem("orders"); const list = raw ? JSON.parse(raw) : []; list.push(order); localStorage.setItem("orders", JSON.stringify(list)); } catch {}
+      this.placedOrder.set(order); this.orderPlaced.set(true); this.cartService.clearCart(); this.placing.set(false);
     }, 1200);
   }
 
-  private generateOrderId(): string {
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = pad(d.getMonth() + 1);
-    const day = pad(d.getDate());
-    const rand = Math.floor(1000 + Math.random() * 9000);
-    return `AHC-${y}${m}${day}-${rand}`;
-  }
-
-  private ensureTransactionId(): string | null {
-    if (this.paymentMethod.type === "jazzcash") {
-      if (!this.paymentDetails.jazzcash.transactionId) {
-        this.paymentDetails.jazzcash.transactionId = `JC-${Date.now()}`;
-      }
-      return this.paymentDetails.jazzcash.transactionId;
-    }
-    if (this.paymentMethod.type === "easypaisa") {
-      if (!this.paymentDetails.easypaisa.transactionId) {
-        this.paymentDetails.easypaisa.transactionId = `EP-${Date.now()}`;
-      }
-      return this.paymentDetails.easypaisa.transactionId;
-    }
-    if (this.paymentMethod.type === "bank_transfer") {
-      return this.paymentDetails.bank.transactionId || null;
-    }
-    return null;
-  }
+  private generateOrderId(): string { const pad = (n: number) => n.toString().padStart(2, "0"); const d = new Date(); const y = d.getFullYear(); const m = pad(d.getMonth() + 1); const day = pad(d.getDate()); const rand = Math.floor(1000 + Math.random() * 9000); return `AHC-${y}${m}${day}-${rand}`; }
+  private ensureTransactionId(): string | null { if (this.paymentMethod.type === "jazzcash") { if (!this.paymentDetails.jazzcash.transactionId) { this.paymentDetails.jazzcash.transactionId = `JC-${Date.now()}`; } return this.paymentDetails.jazzcash.transactionId; } if (this.paymentMethod.type === "easypaisa") { if (!this.paymentDetails.easypaisa.transactionId) { this.paymentDetails.easypaisa.transactionId = `EP-${Date.now()}`; } return this.paymentDetails.easypaisa.transactionId; } if (this.paymentMethod.type === "bank_transfer") { return this.paymentDetails.bank.transactionId || null; } return null; }
 }
