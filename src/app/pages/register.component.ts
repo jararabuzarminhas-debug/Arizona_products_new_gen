@@ -1,7 +1,7 @@
 import { Component, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { RouterModule, Router } from "@angular/router";
+import { RouterModule, Router, ActivatedRoute } from "@angular/router";
 import { AuthService, RegisterData } from "../services/auth.service";
 
 @Component({
@@ -21,17 +21,15 @@ import { AuthService, RegisterData } from "../services/auth.service";
             class="mx-auto h-16 w-auto"
           />
           <h2 class="mt-6 text-3xl font-bold text-medical-navy font-medical">
-            Create your account
+            {{ isAdminSignup ? 'Create admin account' : 'Create your account' }}
           </h2>
           <p class="mt-2 text-sm text-gray-600">
             Already have an account?
-            <a
-              routerLink="/login"
-              class="font-medium text-medical-blue hover:text-medical-navy transition-colors"
-            >
-              Sign in here
-            </a>
+            <a routerLink="/login" class="font-medium text-medical-blue hover:text-medical-navy transition-colors">Sign in here</a>
           </p>
+          <div *ngIf="isAdminSignup" class="mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">
+            Admin accounts require an email ending with @arizonahcp.com and email verification.
+          </div>
         </div>
 
         <!-- Registration Form -->
@@ -91,7 +89,7 @@ import { AuthService, RegisterData } from "../services/auth.service";
                 [(ngModel)]="registerData.email"
                 required
                 (blur)="checkEmailAvailability()"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-medical-blue focus:border-transparent"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-medical-blue focus:border-transparent" [class.border-red-400]="isAdminSignup && !validAdminEmail() && registerData.email"
                 placeholder="Enter your email"
               />
               <p *ngIf="emailExists()" class="mt-1 text-sm text-red-600">
@@ -318,10 +316,15 @@ export class RegisterComponent {
   successMessage = signal("");
   emailExists = signal(false);
 
+  isAdminSignup = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    this.isAdminSignup = (this.route.snapshot.queryParamMap.get('role') || '').toLowerCase() === 'admin';
+  }
 
   togglePassword(): void {
     this.showPassword.update((show) => !show);
@@ -344,8 +347,12 @@ export class RegisterComponent {
     }
   }
 
+  validAdminEmail(): boolean {
+    return this.registerData.email.toLowerCase().endsWith('@arizonahcp.com');
+  }
+
   isFormValid(): boolean {
-    return !!(
+    const baseValid = !!(
       this.registerData.firstName &&
       this.registerData.lastName &&
       this.registerData.email &&
@@ -356,6 +363,7 @@ export class RegisterComponent {
       this.agreeTerms &&
       !this.emailExists()
     );
+    return this.isAdminSignup ? baseValid && this.validAdminEmail() : baseValid;
   }
 
   async onSubmit(): Promise<void> {
@@ -369,7 +377,7 @@ export class RegisterComponent {
     this.successMessage.set("");
 
     try {
-      const result = await this.authService.register(this.registerData);
+      const result = await this.authService.register({ ...this.registerData, role: this.isAdminSignup ? 'admin' : 'customer' });
 
       if (result.success) {
         this.successMessage.set(result.message);
