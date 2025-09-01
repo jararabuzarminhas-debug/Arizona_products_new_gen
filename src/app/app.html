@@ -100,30 +100,27 @@
           class="text-gray-700 hover:text-medical-blue font-medium transition-colors py-2 px-1 text-sm tracking-wide"
           >Contact</a
         >
-        <a
-          href="/testimonials"
-          class="text-gray-700 hover:text-medical-blue font-medium transition-colors py-2 px-1 text-sm tracking-wide"
-          >Testimonials</a
-        >
       </nav>
 
       <!-- Auth & Cart -->
       <div class="flex items-center space-x-4">
         <!-- Authentication Links -->
-        <div
-          *ngIf="!authService.authenticated()"
-          class="hidden md:flex items-center space-x-4"
-        >
-          <a
-            href="/login"
-            class="text-gray-700 hover:text-medical-blue transition-colors font-medium"
-            >Login</a
-          >
-          <a
-            href="/register"
-            class="bg-medical-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors"
-            >Sign Up</a
-          >
+        <div *ngIf="!authService.authenticated()" class="hidden md:flex items-center">
+          <div class="relative group">
+            <button class="flex items-center text-gray-700 hover:text-medical-blue transition-colors">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="sr-only">Account</span>
+              <svg class="w-4 h-4 ml-1 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+            <div class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <a href="/login" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Login</a>
+              <a href="/register" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Register</a>
+            </div>
+          </div>
         </div>
 
         <!-- User Account -->
@@ -132,23 +129,13 @@
           class="hidden md:flex items-center space-x-4"
         >
           <div class="relative group">
-            <button
-              class="flex items-center space-x-2 text-gray-700 hover:text-medical-blue transition-colors"
-            >
+            <button class="flex items-center text-gray-700 hover:text-medical-blue transition-colors">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  clip-rule="evenodd"
-                ></path>
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
               </svg>
-              <span class="text-sm">{{authService.user()?.firstName}}</span>
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
+              <span class="sr-only">Account</span>
+              <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
             <!-- Dropdown Menu -->
@@ -294,11 +281,6 @@
           <li>
             <a href="/shop" class="hover:text-white transition-colors"
               >All Products</a
-            >
-          </li>
-          <li>
-            <a href="/testimonials" class="hover:text-white transition-colors"
-              >Testimonials</a
             >
           </li>
           <li>
