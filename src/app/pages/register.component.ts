@@ -323,7 +323,9 @@ export class RegisterComponent {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.isAdminSignup = (this.route.snapshot.queryParamMap.get('role') || '').toLowerCase() === 'admin';
+    this.isAdminSignup =
+      (this.route.snapshot.queryParamMap.get("role") || "").toLowerCase() ===
+      "admin";
   }
 
   togglePassword(): void {
@@ -348,7 +350,7 @@ export class RegisterComponent {
   }
 
   validAdminEmail(): boolean {
-    return this.registerData.email.toLowerCase().endsWith('@arizonahcp.com');
+    return this.registerData.email.toLowerCase().endsWith("@arizonahcp.com");
   }
 
   isFormValid(): boolean {
@@ -377,7 +379,10 @@ export class RegisterComponent {
     this.successMessage.set("");
 
     try {
-      const result = await this.authService.register({ ...this.registerData, role: this.isAdminSignup ? 'admin' : 'customer' });
+      const result = await this.authService.register({
+        ...this.registerData,
+        role: this.isAdminSignup ? "admin" : "customer",
+      });
 
       if (result.success) {
         this.successMessage.set(result.message);

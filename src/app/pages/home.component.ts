@@ -198,7 +198,9 @@ import { Component } from "@angular/core";
           <div class="lg:col-span-1 text-center lg:text-left">
             <div class="bg-medical-blue text-white rounded-xl p-4">
               <h3 class="text-lg font-bold mb-1">4 Certificates</h3>
-              <p class="text-sm text-blue-100">From Global & National Authorities</p>
+              <p class="text-sm text-blue-100">
+                From Global & National Authorities
+              </p>
             </div>
           </div>
 
@@ -208,15 +210,47 @@ import { Component } from "@angular/core";
               <div class="absolute left-0 top-0 h-full w-24 bg-white"></div>
               <div class="absolute right-0 top-0 h-full w-24 bg-white"></div>
               <div class="animate-scroll flex items-center space-x-16">
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160" alt="FDA" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160" alt="DRAP" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160" alt="CDA" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160" alt="ISO" class="h-14 w-auto object-contain shrink-0" />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160"
+                  alt="FDA"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160"
+                  alt="DRAP"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160"
+                  alt="CDA"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160"
+                  alt="ISO"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
                 <!-- duplicate sequence for seamless scroll -->
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160" alt="FDA" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160" alt="DRAP" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160" alt="CDA" class="h-14 w-auto object-contain shrink-0" />
-                <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160" alt="ISO" class="h-14 w-auto object-contain shrink-0" />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F1f1502d9a8224eea86bf9439bfdf2723?format=webp&width=160"
+                  alt="FDA"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2Fbc2efc8bcb1147018a9aa7b2fc88f9ad?format=webp&width=160"
+                  alt="DRAP"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F905a3e873c5b4c028d3d66a2f8d42ffa?format=webp&width=160"
+                  alt="CDA"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F3748f4f65f554f98af1921e55a2aac5a?format=webp&width=160"
+                  alt="ISO"
+                  class="h-14 w-auto object-contain shrink-0"
+                />
               </div>
             </div>
           </div>
@@ -225,16 +259,24 @@ import { Component } from "@angular/core";
     </section>
 
     <!-- Trending Now - Bundle Section -->
-    <section class="py-12 bg-gradient-to-br from-arizona-orange/10 to-healthcare-orange/10">
+    <section
+      class="py-12 bg-gradient-to-br from-arizona-orange/10 to-healthcare-orange/10"
+    >
       <div class="container mx-auto px-4">
         <div class="text-center mb-8">
-          <div class="inline-flex items-center bg-healthcare-orange text-white px-4 py-2 rounded-full mb-4">
+          <div
+            class="inline-flex items-center bg-healthcare-orange text-white px-4 py-2 rounded-full mb-4"
+          >
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+              ></path>
             </svg>
             <span class="font-bold text-sm">TRENDING NOW</span>
           </div>
-          <h2 class="text-3xl lg:text-4xl font-bold text-medical-navy font-medical mb-4">
+          <h2
+            class="text-3xl lg:text-4xl font-bold text-medical-navy font-medical mb-4"
+          >
             High Sale Bundle Offers
           </h2>
           <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -244,75 +286,122 @@ import { Component } from "@angular/core";
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           <!-- Bundle of 2 -->
-          <div class="bg-white rounded-xl p-6 shadow-lg border-2 border-healthcare-orange/20 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+          <div
+            class="bg-white rounded-xl p-6 shadow-lg border-2 border-healthcare-orange/20 hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+          >
             <!-- Trending Badge -->
-            <div class="absolute top-4 right-4 bg-healthcare-orange text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+            <div
+              class="absolute top-4 right-4 bg-healthcare-orange text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse"
+            >
               🔥 HOT DEAL
             </div>
-            
+
             <div class="text-center">
               <div class="mb-6">
                 <div class="flex justify-center items-center space-x-2 mb-4">
-                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150" 
-                       alt="Bye Bye Fever" class="w-20 h-24 object-contain">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150"
+                    alt="Bye Bye Fever"
+                    class="w-20 h-24 object-contain"
+                  />
                   <span class="text-2xl font-bold text-medical-blue">+</span>
-                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150" 
-                       alt="Bye Bye Fever" class="w-20 h-24 object-contain">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150"
+                    alt="Bye Bye Fever"
+                    class="w-20 h-24 object-contain"
+                  />
                 </div>
-                <h3 class="text-xl font-bold text-medical-navy mb-2">Bundle of 2 Packs</h3>
-                <p class="text-gray-600 text-sm mb-4">4 cooling patches total • Perfect for couples</p>
+                <h3 class="text-xl font-bold text-medical-navy mb-2">
+                  Bundle of 2 Packs
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  4 cooling patches total • Perfect for couples
+                </p>
               </div>
 
               <div class="mb-6">
                 <div class="flex items-center justify-center space-x-2 mb-2">
-                  <span class="text-2xl font-bold text-red-500 line-through">PKR 598</span>
-                  <span class="text-3xl font-bold text-healthcare-green">PKR 499</span>
+                  <span class="text-2xl font-bold text-red-500 line-through"
+                    >PKR 598</span
+                  >
+                  <span class="text-3xl font-bold text-healthcare-green"
+                    >PKR 499</span
+                  >
                 </div>
-                <div class="bg-healthcare-green text-white px-3 py-1 rounded-full text-sm font-bold inline-block">
+                <div
+                  class="bg-healthcare-green text-white px-3 py-1 rounded-full text-sm font-bold inline-block"
+                >
                   Save PKR 99 (17% OFF)
                 </div>
               </div>
 
-              <button class="w-full bg-healthcare-orange text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition-colors">
+              <button
+                class="w-full bg-healthcare-orange text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition-colors"
+              >
                 Order Bundle of 2
               </button>
             </div>
           </div>
 
           <!-- Bundle of 3 -->
-          <div class="bg-white rounded-xl p-6 shadow-lg border-2 border-medical-blue/20 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+          <div
+            class="bg-white rounded-xl p-6 shadow-lg border-2 border-medical-blue/20 hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+          >
             <!-- Most Popular Badge -->
-            <div class="absolute top-4 right-4 bg-medical-blue text-white px-3 py-1 rounded-full text-xs font-bold">
+            <div
+              class="absolute top-4 right-4 bg-medical-blue text-white px-3 py-1 rounded-full text-xs font-bold"
+            >
               ⭐ MOST POPULAR
             </div>
-            
+
             <div class="text-center">
               <div class="mb-6">
                 <div class="flex justify-center items-center space-x-1 mb-4">
-                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150" 
-                       alt="Bye Bye Fever" class="w-16 h-20 object-contain">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150"
+                    alt="Bye Bye Fever"
+                    class="w-16 h-20 object-contain"
+                  />
                   <span class="text-xl font-bold text-medical-blue">+</span>
-                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150" 
-                       alt="Bye Bye Fever" class="w-16 h-20 object-contain">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150"
+                    alt="Bye Bye Fever"
+                    class="w-16 h-20 object-contain"
+                  />
                   <span class="text-xl font-bold text-medical-blue">+</span>
-                  <img src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150" 
-                       alt="Bye Bye Fever" class="w-16 h-20 object-contain">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F9b521cffba264c368029dd6e2d6a20f2%2F88c51a0e3ab44433a76f6eab60193797?format=webp&width=150"
+                    alt="Bye Bye Fever"
+                    class="w-16 h-20 object-contain"
+                  />
                 </div>
-                <h3 class="text-xl font-bold text-medical-navy mb-2">Bundle of 3 Packs</h3>
-                <p class="text-gray-600 text-sm mb-4">6 cooling patches total • Best for families</p>
+                <h3 class="text-xl font-bold text-medical-navy mb-2">
+                  Bundle of 3 Packs
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">
+                  6 cooling patches total • Best for families
+                </p>
               </div>
 
               <div class="mb-6">
                 <div class="flex items-center justify-center space-x-2 mb-2">
-                  <span class="text-2xl font-bold text-red-500 line-through">PKR 897</span>
-                  <span class="text-3xl font-bold text-medical-blue">PKR 699</span>
+                  <span class="text-2xl font-bold text-red-500 line-through"
+                    >PKR 897</span
+                  >
+                  <span class="text-3xl font-bold text-medical-blue"
+                    >PKR 699</span
+                  >
                 </div>
-                <div class="bg-medical-blue text-white px-3 py-1 rounded-full text-sm font-bold inline-block">
+                <div
+                  class="bg-medical-blue text-white px-3 py-1 rounded-full text-sm font-bold inline-block"
+                >
                   Save PKR 198 (22% OFF)
                 </div>
               </div>
 
-              <button class="w-full bg-medical-blue text-white py-3 rounded-lg font-bold hover:bg-medical-navy transition-colors">
+              <button
+                class="w-full bg-medical-blue text-white py-3 rounded-lg font-bold hover:bg-medical-navy transition-colors"
+              >
                 Order Bundle of 3
               </button>
             </div>
@@ -321,21 +410,35 @@ import { Component } from "@angular/core";
 
         <!-- Bundle Benefits -->
         <div class="text-center mt-8">
-          <div class="inline-flex items-center space-x-6 bg-white rounded-lg px-6 py-3 shadow-md">
+          <div
+            class="inline-flex items-center space-x-6 bg-white rounded-lg px-6 py-3 shadow-md"
+          >
             <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <svg class="w-4 h-4 text-healthcare-green" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                class="w-4 h-4 text-healthcare-green"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Free Delivery</span>
             </div>
             <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <svg class="w-4 h-4 text-healthcare-green" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                class="w-4 h-4 text-healthcare-green"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Best Value</span>
             </div>
             <div class="flex items-center space-x-2 text-sm text-gray-600">
-              <svg class="w-4 h-4 text-healthcare-green" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                class="w-4 h-4 text-healthcare-green"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <span>Limited Time</span>
@@ -598,33 +701,51 @@ import { Component } from "@angular/core";
       </div>
     </section>
   `,
-  styles: [`
-    @keyframes scroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    
-    .animate-scroll {
-      animation: scroll 25s linear infinite;
-    }
-    
-    .certification-item {
-      animation: fadeInOut 4s ease-in-out infinite;
-    }
-    
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0.7; transform: scale(0.95); }
-      50% { opacity: 1; transform: scale(1); }
-    }
-    
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-  `]
+  styles: [
+    `
+      @keyframes scroll {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      .animate-scroll {
+        animation: scroll 25s linear infinite;
+      }
+
+      .certification-item {
+        animation: fadeInOut 4s ease-in-out infinite;
+      }
+
+      @keyframes fadeInOut {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: scale(0.95);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    `,
+  ],
 })
 export class HomeComponent {}

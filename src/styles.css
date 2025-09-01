@@ -212,7 +212,8 @@ select:focus {
 }
 
 @keyframes certificationFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: translateY(0px) scale(0.98);
   }

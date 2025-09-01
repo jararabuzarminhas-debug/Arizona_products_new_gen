@@ -64,7 +64,10 @@ export class AuthService {
 
       if (existing) {
         if (existing.role === "admin" && !existing.isVerified) {
-          return { success: false, message: "Admin email not verified. Please check your inbox." };
+          return {
+            success: false,
+            message: "Admin email not verified. Please check your inbox.",
+          };
         }
         this.setUser(existing);
         return { success: true, message: "Login successful" };
@@ -101,12 +104,21 @@ export class AuthService {
 
       const existingUsers = this.getStoredUsers();
       if (existingUsers.some((u) => u.email === data.email)) {
-        return { success: false, message: "User with this email already exists" };
+        return {
+          success: false,
+          message: "User with this email already exists",
+        };
       }
 
       const isAdminSignup = data.role === "admin";
-      if (isAdminSignup && !data.email.toLowerCase().endsWith("@arizonahcp.com")) {
-        return { success: false, message: "Admin accounts must use @arizonahcp.com email" };
+      if (
+        isAdminSignup &&
+        !data.email.toLowerCase().endsWith("@arizonahcp.com")
+      ) {
+        return {
+          success: false,
+          message: "Admin accounts must use @arizonahcp.com email",
+        };
       }
 
       const user: User = {
@@ -126,11 +138,17 @@ export class AuthService {
 
       if (isAdminSignup) {
         console.info("Admin verification token:", user.verificationToken);
-        return { success: true, message: "Admin account created. Verification email sent." };
+        return {
+          success: true,
+          message: "Admin account created. Verification email sent.",
+        };
       }
       return { success: true, message: "Registration successful!" };
     } catch (error) {
-      return { success: false, message: "Registration failed. Please try again." };
+      return {
+        success: false,
+        message: "Registration failed. Please try again.",
+      };
     }
   }
 
@@ -231,7 +249,8 @@ export class AuthService {
   verifyEmail(token: string): { success: boolean; message: string } {
     const users = this.getStoredUsers();
     const idx = users.findIndex((u) => u.verificationToken === token);
-    if (idx === -1) return { success: false, message: "Invalid or expired token" };
+    if (idx === -1)
+      return { success: false, message: "Invalid or expired token" };
     users[idx].isVerified = true;
     users[idx].verificationToken = undefined;
     localStorage.setItem("users", JSON.stringify(users));
