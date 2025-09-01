@@ -15,6 +15,7 @@ export interface User {
   dateJoined: Date;
   isVerified: boolean;
   role: "customer" | "admin";
+  verificationToken?: string;
 }
 
 export interface LoginCredentials {
@@ -29,6 +30,7 @@ export interface RegisterData {
   phone: string;
   password: string;
   confirmPassword: string;
+  role?: "customer" | "admin";
 }
 
 @Injectable({
@@ -51,28 +53,37 @@ export class AuthService {
     credentials: LoginCredentials,
   ): Promise<{ success: boolean; message: string }> {
     try {
-      // Simulate API call
-      await this.delay(1000);
+      await this.delay(500);
 
-      // For demo purposes, accept any email/password combo
-      // In real app, this would be an actual API call
-      if (credentials.email && credentials.password) {
-        const user: User = {
-          id: "user_" + Date.now(),
-          firstName: "Muhammad",
-          lastName: "Hamza",
-          email: credentials.email,
-          phone: "+92-XXX-XXXXXXX",
-          dateJoined: new Date(),
-          isVerified: true,
-          role: credentials.email.includes("admin") ? "admin" : "customer",
-        };
-
-        this.setUser(user);
-        return { success: true, message: "Login successful" };
-      } else {
+      if (!(credentials.email && credentials.password)) {
         return { success: false, message: "Invalid email or password" };
       }
+
+      const users = this.getStoredUsers();
+      const existing = users.find((u) => u.email === credentials.email);
+
+      if (existing) {
+        if (existing.role === "admin" && !existing.isVerified) {
+          return { success: false, message: "Admin email not verified. Please check your inbox." };
+        }
+        this.setUser(existing);
+        return { success: true, message: "Login successful" };
+      }
+
+      // Create customer by default when not found
+      const user: User = {
+        id: "user_" + Date.now(),
+        firstName: credentials.email.split("@")[0],
+        lastName: "",
+        email: credentials.email,
+        phone: "+92-XXX-XXXXXXX",
+        dateJoined: new Date(),
+        isVerified: true,
+        role: "customer",
+      };
+      this.storeUser(user);
+      this.setUser(user);
+      return { success: true, message: "Login successful" };
     } catch (error) {
       return { success: false, message: "Login failed. Please try again." };
     }
@@ -82,24 +93,22 @@ export class AuthService {
     data: RegisterData,
   ): Promise<{ success: boolean; message: string }> {
     try {
-      // Simulate API call
-      await this.delay(1000);
+      await this.delay(800);
 
-      // Validate passwords match
       if (data.password !== data.confirmPassword) {
         return { success: false, message: "Passwords do not match" };
       }
 
-      // Check if user already exists (in real app, this would be server-side)
       const existingUsers = this.getStoredUsers();
       if (existingUsers.some((u) => u.email === data.email)) {
-        return {
-          success: false,
-          message: "User with this email already exists",
-        };
+        return { success: false, message: "User with this email already exists" };
       }
 
-      // Create new user
+      const isAdminSignup = data.role === "admin";
+      if (isAdminSignup && !data.email.toLowerCase().endsWith("@arizonahcp.com")) {
+        return { success: false, message: "Admin accounts must use @arizonahcp.com email" };
+      }
+
       const user: User = {
         id: "user_" + Date.now(),
         firstName: data.firstName,
@@ -107,23 +116,21 @@ export class AuthService {
         email: data.email,
         phone: data.phone,
         dateJoined: new Date(),
-        isVerified: false,
-        role: "customer",
+        isVerified: !isAdminSignup, // admins require verification
+        role: isAdminSignup ? "admin" : "customer",
+        verificationToken: isAdminSignup ? this.generateToken() : undefined,
       };
 
-      // Store user
       this.storeUser(user);
       this.setUser(user);
 
-      return {
-        success: true,
-        message: "Registration successful! Please verify your email.",
-      };
+      if (isAdminSignup) {
+        console.info("Admin verification token:", user.verificationToken);
+        return { success: true, message: "Admin account created. Verification email sent." };
+      }
+      return { success: true, message: "Registration successful!" };
     } catch (error) {
-      return {
-        success: false,
-        message: "Registration failed. Please try again.",
-      };
+      return { success: false, message: "Registration failed. Please try again." };
     }
   }
 
@@ -209,10 +216,31 @@ export class AuthService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  private generateToken(): string {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+
   // Mock method to check if email exists
   async checkEmailExists(email: string): Promise<boolean> {
     await this.delay(300);
     const users = this.getStoredUsers();
     return users.some((u) => u.email === email);
+  }
+
+  // Verify email using token (would be called from email link)
+  verifyEmail(token: string): { success: boolean; message: string } {
+    const users = this.getStoredUsers();
+    const idx = users.findIndex((u) => u.verificationToken === token);
+    if (idx === -1) return { success: false, message: "Invalid or expired token" };
+    users[idx].isVerified = true;
+    users[idx].verificationToken = undefined;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Update current user if matching
+    const current = this.currentUser();
+    if (current && current.id === users[idx].id) {
+      this.setUser(users[idx]);
+    }
+    return { success: true, message: "Email verified successfully" };
   }
 }
