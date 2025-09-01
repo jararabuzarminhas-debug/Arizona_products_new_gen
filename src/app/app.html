@@ -119,6 +119,9 @@
             <div class="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <a href="/login" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Login</a>
               <a href="/register" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Register</a>
+              <div class="border-t border-gray-100 my-2"></div>
+              <a href="/login?role=admin" class="block px-4 py-2 text-sm text-medical-blue hover:bg-gray-100 font-medium">Admin Login</a>
+              <a href="/register?role=admin" class="block px-4 py-2 text-sm text-medical-blue hover:bg-gray-100 font-medium">Admin Register</a>
             </div>
           </div>
         </div>
@@ -173,11 +176,6 @@
             </div>
           </div>
         </div>
-        <button
-          class="bg-medical-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-medical-navy transition-colors"
-        >
-          Find Distributor
-        </button>
         <div class="relative">
           <button
             (click)="openCart()"
