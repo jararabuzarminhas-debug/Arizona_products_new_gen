@@ -189,6 +189,13 @@ interface AddressBookEntry {
 export class AccountComponent {
   activeTab = signal<'profile' | 'orders' | 'addresses' | 'settings'>('orders');
 
+  tabs = [
+    { id: 'orders', label: 'Orders' },
+    { id: 'profile', label: 'Profile' },
+    { id: 'addresses', label: 'Addresses' },
+    { id: 'settings', label: 'Settings' },
+  ];
+
   orders = signal<StoredOrder[]>([]);
   addressBook = signal<AddressBookEntry[]>([]);
 
